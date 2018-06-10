@@ -1,0 +1,22 @@
+{
+  "name": "sdcd",
+  "version": "1.0.0",
+  "description": "",
+  "main": "socket_udp.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Alberto Brincat",
+  "license": "ISC",
+  "scripts": {
+    "start": "node socket_udp.js"
+  },
+  "dependencies": { 
+    "dgram":"",
+    "express":"",
+    "express-static":"",
+    "http":"",
+    "socket.io":"",
+    "opn":""
+  } 
+}

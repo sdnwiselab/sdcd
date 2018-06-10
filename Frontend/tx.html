@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Send a Message</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css" >
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <link rel="stylesheet" href="css/form.css" >
+        <script src="css/form.js"></script>
+    </head>
+    <body >
+        <div class="container">
+            <div class="form-container">
+                <h1>
+                    Send a Message
+                </h1>
+                    
+                    <label for="type">Choose a Protocol:</label>
+                    <select id="type">
+                            <option value="wifi">IEEE 802.11 (WIFI)</option>
+                            <option value="zigbee">IEEE 802.15.4 (Zigbee)</option>
+                    </select>
+                    <label for="message">Message:</label>
+                    <textarea id="message" class="textarea1" name="Message" rows="10" maxlength="6000" required></textarea>
+                    <input type="button" class="button-default" value="Back" onclick="window.location.href='index.html'" />
+                    <button class="button-primary" onclick="doSend()" >Send</button>
+                    STATUS: <span id="output"></span><br>
+                    WRITE ON SOCKET: <span id="send"></span><br>
+                    RESPONSE: <span style="color: blue;" id="receive"></span>
+                    
+
+<script language="javascript" type="text/javascript">
+
+    var wsUri = "ws://151.97.13.244:8000/websocketserver";
+    var output;
+  
+    function init()
+    {
+      output = document.getElementById("output");
+      testWebSocket();
+    }
+  
+    function testWebSocket()
+    {
+      websocket = new WebSocket(wsUri);
+      websocket.onopen = function(evt) { onOpen(evt) };
+      websocket.onclose = function(evt) {   
+      onClose(evt); 
+      };
+      websocket.onmessage = function(evt) { onMessage(evt) };
+      websocket.onerror = function(evt) { onError(evt) };
+    }
+  
+    function onOpen(evt)
+    {
+      writeToScreen('<span style="color: green;">SOCKET ONLINE</span>');
+      
+    }
+  
+    function onClose(evt)
+    {
+      setTimeout(function() { window.location=window.location;},5000);
+      //location.reload();
+      
+      
+    }
+  
+    function onMessage(evt)
+    {
+        document.getElementById("receive").innerHTML=evt.data;   
+     
+    }
+  
+    function onError(evt)
+    {
+      writeToScreen('<span style="color: red;">ERROR:</span> ' + evt.data);
+      
+    }
+  
+    function doSend()
+    {
+      
+      var payload={
+    
+        type: document.getElementById("type").value,
+        message: document.getElementById("message").value
+      };  
+      
+      //writeToScreen("WRITE ON SOCKET: " + JSON.stringify(payload));
+      document.getElementById("send").innerHTML=JSON.stringify(payload);
+      websocket.send(JSON.stringify(payload));
+      
+     
+    }
+  
+
+  
+    function writeToScreen(message)
+    {
+      
+      document.getElementById("output").innerHTML=message;
+      
+    }
+  
+    window.addEventListener("load", init, false);
+</script>
+                
+                
+            </div>
+        </div>
+    </body>
+</html>
